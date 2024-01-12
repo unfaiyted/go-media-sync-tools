@@ -1,0 +1,556 @@
+definitions:
+  controllers.CreateUserInput:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  types.Client:
+    properties:
+      configClients:
+        items:
+          $ref: '#/definitions/types.ConfiguredClient'
+        type: array
+      id:
+        type: string
+      label:
+        type: string
+      libraryClients:
+        items:
+          $ref: '#/definitions/types.LibraryClient'
+        type: array
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/types.ClientType'
+    type: object
+  types.ClientField:
+    properties:
+      clientId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      placeholder:
+        type: string
+      type:
+        $ref: '#/definitions/types.FieldType'
+    type: object
+  types.ClientType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - ClientTypeUnknown
+    - ClientTypeMediaServer
+    - ClientTypeListProvider
+    - ClientTypeUtility
+  types.Config:
+    properties:
+      clients:
+        items:
+          $ref: '#/definitions/types.ConfiguredClient'
+        type: array
+      id:
+        type: string
+      libraries:
+        items:
+          $ref: '#/definitions/types.ConfiguredLibrary'
+        type: array
+      sync:
+        $ref: '#/definitions/types.SyncType'
+      user:
+        $ref: '#/definitions/types.User'
+      userId:
+        type: string
+    type: object
+  types.ConfiguredClient:
+    properties:
+      client:
+        $ref: '#/definitions/types.Client'
+      clientFieldValues:
+        items:
+          $ref: '#/definitions/types.ConfiguredClientFieldValues'
+        type: array
+      clientFields:
+        items:
+          $ref: '#/definitions/types.ClientField'
+        type: array
+      clientID:
+        type: string
+      configID:
+        type: string
+      id:
+        type: string
+      label:
+        type: string
+    type: object
+  types.ConfiguredClientFieldValues:
+    properties:
+      clientField:
+        $ref: '#/definitions/types.ClientField'
+      configuredClientFieldID:
+        type: string
+      configuredClientID:
+        type: string
+      id:
+        type: string
+      value:
+        type: string
+    type: object
+  types.ConfiguredLibrary:
+    type: object
+  types.Coord:
+    properties:
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  types.FieldType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - FieldTypeString
+    - FieldTypeBool
+    - FieldTypeNumber
+    - FieldTypePassword
+  types.LibraryClient:
+    properties:
+      clientID:
+        type: string
+      id:
+        description: Pointer for optional field
+        type: string
+      libraryID:
+        type: string
+      libraryName:
+        type: string
+      mediaListID:
+        description: Pointer for optional field
+        type: string
+    type: object
+  types.MediaImageType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    type: integer
+    x-enum-varnames:
+    - MediaImageTypeUnknown
+    - MediaImageTypePoster
+    - MediaImageTypeBackground
+    - MediaImageTypeBanner
+    - MediaImageTypeLogo
+    - MediaImageTypeThumb
+    - MediaImageTypeClearArt
+    - MediaImageTypeDiscArt
+  types.MediaItem:
+    properties:
+      dateAdded:
+        type: string
+      description:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      originalTitle:
+        type: string
+      parentalRating:
+        type: string
+      poster:
+        type: string
+      providers:
+        $ref: '#/definitions/types.MediaProviderIDs'
+      ratings:
+        $ref: '#/definitions/types.MediaItemRatings'
+      releaseDate:
+        type: string
+      sortTitle:
+        type: string
+      tagline:
+        type: string
+      title:
+        type: string
+      type:
+        $ref: '#/definitions/types.MediaType'
+      year:
+        type: string
+    type: object
+  types.MediaItemRatings:
+    type: object
+  types.MediaList:
+    properties:
+      clientID:
+        type: string
+      createdAt:
+        type: string
+      creator:
+        $ref: '#/definitions/types.User'
+      creatorID:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      items:
+        description: Filters     Filters          `gorm:"foreignKey:FiltersID"`
+        items:
+          $ref: '#/definitions/types.MediaListItem'
+        type: array
+      name:
+        type: string
+      poster:
+        $ref: '#/definitions/types.ProviderPoster'
+      posterID:
+        type: string
+      sortName:
+        type: string
+      type:
+        $ref: '#/definitions/types.MediaListType'
+    type: object
+  types.MediaListItem:
+    properties:
+      dateAdded:
+        type: string
+      id:
+        type: string
+      item:
+        $ref: '#/definitions/types.MediaItem'
+      mediaItemId:
+        type: string
+      mediaListId:
+        type: string
+      mediaPosterId:
+        type: string
+      poster:
+        $ref: '#/definitions/types.MediaPoster'
+      sourceId:
+        type: string
+    type: object
+  types.MediaListType:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - MediaListTypeUnknown
+    - MediaListTypeCollection
+    - MediaListTypeLibrary
+  types.MediaPoster:
+    properties:
+      background:
+        $ref: '#/definitions/types.MediaPosterBackgroundOptions'
+      border:
+        $ref: '#/definitions/types.MediaPosterBorderOptions'
+      gradient:
+        $ref: '#/definitions/types.MediaPosterGradientOptions'
+      icon:
+        $ref: '#/definitions/types.MediaPosterIconOptions'
+      id:
+        type: string
+      itemId:
+        type: string
+      overlays:
+        items:
+          $ref: '#/definitions/types.MediaPosterOverlayOptions'
+        type: array
+      size:
+        $ref: '#/definitions/types.Size'
+      text:
+        $ref: '#/definitions/types.MediaPosterTextOptions'
+      type:
+        $ref: '#/definitions/types.MediaImageType'
+      url:
+        type: string
+    type: object
+  types.MediaPosterBackgroundOptions:
+    properties:
+      border:
+        $ref: '#/definitions/types.MediaPosterBorderOptions'
+      color:
+        allOf:
+        - $ref: '#/definitions/types.RGBAColor'
+        description: '# image Optional[Image] = Nong'
+      enabled:
+        type: boolean
+      opacity:
+        type: number
+      position:
+        $ref: '#/definitions/types.Coord'
+      shadow:
+        $ref: '#/definitions/types.MediaPosterShadowOptions'
+      url:
+        type: string
+    type: object
+  types.MediaPosterBorderOptions:
+    properties:
+      color:
+        $ref: '#/definitions/types.RGBAColor'
+      enabled:
+        type: boolean
+      size:
+        $ref: '#/definitions/types.Size'
+    type: object
+  types.MediaPosterGradientOptions:
+    properties:
+      angle:
+        type: integer
+      colors:
+        items:
+          $ref: '#/definitions/types.RGBAColor'
+        type: array
+      enabled:
+        type: boolean
+      opacity:
+        type: number
+      type:
+        type: string
+    type: object
+  types.MediaPosterIconOptions:
+    properties:
+      enabled:
+        type: boolean
+      path:
+        type: string
+      position:
+        $ref: '#/definitions/types.Coord'
+      size:
+        $ref: '#/definitions/types.Size'
+    type: object
+  types.MediaPosterOverlayOptions:
+    properties:
+      backgroundColor:
+        $ref: '#/definitions/types.RGBAColor'
+      border:
+        $ref: '#/definitions/types.MediaPosterBorderOptions'
+      cornerRadius:
+        type: integer
+      enabled:
+        type: boolean
+      icon:
+        $ref: '#/definitions/types.MediaPosterIconOptions'
+      position:
+        $ref: '#/definitions/types.Coord'
+      shadow:
+        $ref: '#/definitions/types.MediaPosterShadowOptions'
+      text:
+        type: string
+      textColor:
+        $ref: '#/definitions/types.RGBAColor'
+      transparency:
+        type: integer
+    type: object
+  types.MediaPosterShadowOptions:
+    properties:
+      blur:
+        type: integer
+      color:
+        $ref: '#/definitions/types.RGBAColor'
+      enabled:
+        type: boolean
+      offset:
+        type: integer
+      transparency:
+        type: integer
+    type: object
+  types.MediaPosterTextOptions:
+    properties:
+      border:
+        $ref: '#/definitions/types.MediaPosterBorderOptions'
+      color:
+        $ref: '#/definitions/types.RGBAColor'
+      enabled:
+        type: boolean
+      font:
+        type: string
+      position:
+        $ref: '#/definitions/types.Coord'
+      shadow:
+        $ref: '#/definitions/types.MediaPosterShadowOptions'
+      text:
+        type: string
+    type: object
+  types.MediaProviderIDs:
+    type: object
+  types.MediaType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - MediaTypeUnknown
+    - MediaTypeMovie
+    - MediaTypeShow
+    - MediaTpeEpisode
+    - MediaTypeSeason
+  types.ProviderPoster:
+    properties:
+      id:
+        type: string
+      providerId:
+        type: string
+      size:
+        $ref: '#/definitions/types.Size'
+      type:
+        $ref: '#/definitions/types.MediaImageType'
+      url:
+        type: string
+    type: object
+  types.RGBAColor:
+    properties:
+      a:
+        type: integer
+      b:
+        type: integer
+      g:
+        type: integer
+      r:
+        type: integer
+    type: object
+  types.Size:
+    properties:
+      h:
+        type: integer
+      w:
+        type: integer
+    type: object
+  types.SyncType:
+    type: object
+  types.User:
+    properties:
+      configId:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      lists:
+        items:
+          $ref: '#/definitions/types.MediaList'
+        type: array
+      name:
+        type: string
+      password:
+        type: string
+      userConfig:
+        $ref: '#/definitions/types.Config'
+    type: object
+info:
+  contact: {}
+paths:
+  /user/{identifier}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user by their ID or username
+      parameters:
+      - description: User ID or Username
+        in: path
+        name: identifier
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.User'
+      summary: Get a single user
+      tags:
+      - users
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of users
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of users per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.User'
+            type: array
+      summary: Gets a list of users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a user
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.User'
+      summary: Create a user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.User'
+      summary: Delete a user
+      tags:
+      - users
+swagger: "2.0"

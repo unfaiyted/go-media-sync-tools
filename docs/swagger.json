@@ -1,0 +1,832 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/user/{identifier}": {
+            "get": {
+                "description": "Retrieves a user by their ID or username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a single user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID or Username",
+                        "name": "identifier",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "Retrieves a list of users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Gets a list of users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of users per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.User"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create a user",
+                "parameters": [
+                    {
+                        "description": "User Data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.CreateUserInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "delete": {
+                "description": "Delete a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controllers.CreateUserInput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.Client": {
+            "type": "object",
+            "properties": {
+                "configClients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.ConfiguredClient"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "libraryClients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.LibraryClient"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.ClientType"
+                }
+            }
+        },
+        "types.ClientField": {
+            "type": "object",
+            "properties": {
+                "clientId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "placeholder": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.FieldType"
+                }
+            }
+        },
+        "types.ClientType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "ClientTypeUnknown",
+                "ClientTypeMediaServer",
+                "ClientTypeListProvider",
+                "ClientTypeUtility"
+            ]
+        },
+        "types.Config": {
+            "type": "object",
+            "properties": {
+                "clients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.ConfiguredClient"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "libraries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.ConfiguredLibrary"
+                    }
+                },
+                "sync": {
+                    "$ref": "#/definitions/types.SyncType"
+                },
+                "user": {
+                    "$ref": "#/definitions/types.User"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.ConfiguredClient": {
+            "type": "object",
+            "properties": {
+                "client": {
+                    "$ref": "#/definitions/types.Client"
+                },
+                "clientFieldValues": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.ConfiguredClientFieldValues"
+                    }
+                },
+                "clientFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.ClientField"
+                    }
+                },
+                "clientID": {
+                    "type": "string"
+                },
+                "configID": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.ConfiguredClientFieldValues": {
+            "type": "object",
+            "properties": {
+                "clientField": {
+                    "$ref": "#/definitions/types.ClientField"
+                },
+                "configuredClientFieldID": {
+                    "type": "string"
+                },
+                "configuredClientID": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.ConfiguredLibrary": {
+            "type": "object"
+        },
+        "types.Coord": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.FieldType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "FieldTypeString",
+                "FieldTypeBool",
+                "FieldTypeNumber",
+                "FieldTypePassword"
+            ]
+        },
+        "types.LibraryClient": {
+            "type": "object",
+            "properties": {
+                "clientID": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Pointer for optional field",
+                    "type": "string"
+                },
+                "libraryID": {
+                    "type": "string"
+                },
+                "libraryName": {
+                    "type": "string"
+                },
+                "mediaListID": {
+                    "description": "Pointer for optional field",
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaImageType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "x-enum-varnames": [
+                "MediaImageTypeUnknown",
+                "MediaImageTypePoster",
+                "MediaImageTypeBackground",
+                "MediaImageTypeBanner",
+                "MediaImageTypeLogo",
+                "MediaImageTypeThumb",
+                "MediaImageTypeClearArt",
+                "MediaImageTypeDiscArt"
+            ]
+        },
+        "types.MediaItem": {
+            "type": "object",
+            "properties": {
+                "dateAdded": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "originalTitle": {
+                    "type": "string"
+                },
+                "parentalRating": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "providers": {
+                    "$ref": "#/definitions/types.MediaProviderIDs"
+                },
+                "ratings": {
+                    "$ref": "#/definitions/types.MediaItemRatings"
+                },
+                "releaseDate": {
+                    "type": "string"
+                },
+                "sortTitle": {
+                    "type": "string"
+                },
+                "tagline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.MediaType"
+                },
+                "year": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaItemRatings": {
+            "type": "object"
+        },
+        "types.MediaList": {
+            "type": "object",
+            "properties": {
+                "clientID": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "creator": {
+                    "$ref": "#/definitions/types.User"
+                },
+                "creatorID": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "items": {
+                    "description": "Filters     Filters          `gorm:\"foreignKey:FiltersID\"`",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.MediaListItem"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "poster": {
+                    "$ref": "#/definitions/types.ProviderPoster"
+                },
+                "posterID": {
+                    "type": "string"
+                },
+                "sortName": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.MediaListType"
+                }
+            }
+        },
+        "types.MediaListItem": {
+            "type": "object",
+            "properties": {
+                "dateAdded": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "item": {
+                    "$ref": "#/definitions/types.MediaItem"
+                },
+                "mediaItemId": {
+                    "type": "string"
+                },
+                "mediaListId": {
+                    "type": "string"
+                },
+                "mediaPosterId": {
+                    "type": "string"
+                },
+                "poster": {
+                    "$ref": "#/definitions/types.MediaPoster"
+                },
+                "sourceId": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaListType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "MediaListTypeUnknown",
+                "MediaListTypeCollection",
+                "MediaListTypeLibrary"
+            ]
+        },
+        "types.MediaPoster": {
+            "type": "object",
+            "properties": {
+                "background": {
+                    "$ref": "#/definitions/types.MediaPosterBackgroundOptions"
+                },
+                "border": {
+                    "$ref": "#/definitions/types.MediaPosterBorderOptions"
+                },
+                "gradient": {
+                    "$ref": "#/definitions/types.MediaPosterGradientOptions"
+                },
+                "icon": {
+                    "$ref": "#/definitions/types.MediaPosterIconOptions"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "itemId": {
+                    "type": "string"
+                },
+                "overlays": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.MediaPosterOverlayOptions"
+                    }
+                },
+                "size": {
+                    "$ref": "#/definitions/types.Size"
+                },
+                "text": {
+                    "$ref": "#/definitions/types.MediaPosterTextOptions"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.MediaImageType"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaPosterBackgroundOptions": {
+            "type": "object",
+            "properties": {
+                "border": {
+                    "$ref": "#/definitions/types.MediaPosterBorderOptions"
+                },
+                "color": {
+                    "description": "# image Optional[Image] = Nong",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.RGBAColor"
+                        }
+                    ]
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "opacity": {
+                    "type": "number"
+                },
+                "position": {
+                    "$ref": "#/definitions/types.Coord"
+                },
+                "shadow": {
+                    "$ref": "#/definitions/types.MediaPosterShadowOptions"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaPosterBorderOptions": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "$ref": "#/definitions/types.RGBAColor"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "size": {
+                    "$ref": "#/definitions/types.Size"
+                }
+            }
+        },
+        "types.MediaPosterGradientOptions": {
+            "type": "object",
+            "properties": {
+                "angle": {
+                    "type": "integer"
+                },
+                "colors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.RGBAColor"
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "opacity": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaPosterIconOptions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/types.Coord"
+                },
+                "size": {
+                    "$ref": "#/definitions/types.Size"
+                }
+            }
+        },
+        "types.MediaPosterOverlayOptions": {
+            "type": "object",
+            "properties": {
+                "backgroundColor": {
+                    "$ref": "#/definitions/types.RGBAColor"
+                },
+                "border": {
+                    "$ref": "#/definitions/types.MediaPosterBorderOptions"
+                },
+                "cornerRadius": {
+                    "type": "integer"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "icon": {
+                    "$ref": "#/definitions/types.MediaPosterIconOptions"
+                },
+                "position": {
+                    "$ref": "#/definitions/types.Coord"
+                },
+                "shadow": {
+                    "$ref": "#/definitions/types.MediaPosterShadowOptions"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "textColor": {
+                    "$ref": "#/definitions/types.RGBAColor"
+                },
+                "transparency": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.MediaPosterShadowOptions": {
+            "type": "object",
+            "properties": {
+                "blur": {
+                    "type": "integer"
+                },
+                "color": {
+                    "$ref": "#/definitions/types.RGBAColor"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "transparency": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.MediaPosterTextOptions": {
+            "type": "object",
+            "properties": {
+                "border": {
+                    "$ref": "#/definitions/types.MediaPosterBorderOptions"
+                },
+                "color": {
+                    "$ref": "#/definitions/types.RGBAColor"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "font": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/types.Coord"
+                },
+                "shadow": {
+                    "$ref": "#/definitions/types.MediaPosterShadowOptions"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MediaProviderIDs": {
+            "type": "object"
+        },
+        "types.MediaType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "MediaTypeUnknown",
+                "MediaTypeMovie",
+                "MediaTypeShow",
+                "MediaTpeEpisode",
+                "MediaTypeSeason"
+            ]
+        },
+        "types.ProviderPoster": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "providerId": {
+                    "type": "string"
+                },
+                "size": {
+                    "$ref": "#/definitions/types.Size"
+                },
+                "type": {
+                    "$ref": "#/definitions/types.MediaImageType"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.RGBAColor": {
+            "type": "object",
+            "properties": {
+                "a": {
+                    "type": "integer"
+                },
+                "b": {
+                    "type": "integer"
+                },
+                "g": {
+                    "type": "integer"
+                },
+                "r": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.Size": {
+            "type": "object",
+            "properties": {
+                "h": {
+                    "type": "integer"
+                },
+                "w": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.SyncType": {
+            "type": "object"
+        },
+        "types.User": {
+            "type": "object",
+            "properties": {
+                "configId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lists": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.MediaList"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "userConfig": {
+                    "$ref": "#/definitions/types.Config"
+                }
+            }
+        }
+    }
+}
